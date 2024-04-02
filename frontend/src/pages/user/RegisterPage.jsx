@@ -70,6 +70,23 @@ function RegisterPage() {
                 </div>
 
                 <div className="mb-4">
+                    <label className="block text-white">Bio</label>
+                    <textarea
+                        {...register("bio")}
+                        className="block w-full px-4 py-2 mt-1 text-gray-800 bg-white rounded-lg"
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-white">Picture</label>
+                    <input
+                        type="file"
+                        {...register("picture")}
+                        className="block w-full px-4 py-2 mt-1 text-gray-800 bg-white rounded-lg"
+                    />
+                </div>
+
+                <div className="mb-4">
                     <button
                         type="submit"
                         className="px-4 py-2 bg-white text-lime-400 rounded-lg hover:bg-gray-100"

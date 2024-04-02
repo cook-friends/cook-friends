@@ -26,6 +26,8 @@ export const register = async (req, res) => {
             _id: userSaved._id,
             username: userSaved.username,
             email: userSaved.email,
+            picture: userSaved.picture,
+            bio: userSaved.bio,
             createdAt: userSaved.createdAt,
             updatedAt: userSaved.updatedAt,
         });
@@ -60,6 +62,8 @@ export const login = async (req, res) => {
             _id: userFound._id,
             username: userFound.username,
             email: userFound.email,
+            picture: userFound.picture,
+            bio: userFound.bio,
             createdAt: userFound.createdAt,
             updatedAt: userFound.updatedAt,
         });
@@ -88,7 +92,12 @@ export const verifyToken = async (req, res) => {
 
         return res.json({
             id: userFound._id,
+            username: userFound.username,
             email: userFound.email,
+            picture: userFound.picture,
+            bio: userFound.bio,
+            createdAt: userFound.createdAt,
+            updatedAt: userFound.updatedAt,
         });
     });
 };
