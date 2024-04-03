@@ -3,17 +3,23 @@ import { useAuth } from "../../context/AuthContext";
 function ProfilePage() {
     const { user } = useAuth();
 
-    console.log(user);
-
     return (
         <div className="mt-10 p-6 flex flex-wrap items-center justify-center">
             <div className="container w-2/3 bg-white  shadow    transform   duration-200 easy-in-out ">
                 <div className="flex justify-center px-5  -mt-12">
-                    <img
-                        className="h-32 w-32 bg-white rounded-full border-lime-400 border-4"
-                        src={user.picture}
-                        alt="picture"
-                    />
+                    {user.picture.secure_url ? (
+                        <img
+                            className="h-32 w-32 bg-white rounded-full border-lime-400 border-4"
+                            src={user.picture.secure_url}
+                            alt="picture"
+                        />
+                    ) : (
+                        <img
+                            className="h-32 w-32 bg-white rounded-full border-lime-400 border-4"
+                            src="/assets/user/avatar.jpg"
+                            alt="picture"
+                        />
+                    )}
                 </div>
                 <div className=" ">
                     <div className="text-center px-14">
@@ -26,11 +32,15 @@ function ProfilePage() {
                         >
                             Follow
                         </button>
-                        <p className="mt-2 text-gray-500 text-sm">
-                            Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry. Lorem Ipsum has been the
-                            industrys standard dummy text ever since the 1500s,{" "}
-                        </p>
+                        {user.bio ? (
+                            <p className="mt-2 text-gray-500 text-sm">
+                                {user.bio}
+                            </p>
+                        ) : (
+                            <p className="mt-2 text-gray-500 text-sm italic">
+                                No bio available
+                            </p>
+                        )}
                     </div>
                     <hr className="mt-6" />
                     <div className="flex  bg-gray-50 ">

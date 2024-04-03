@@ -18,7 +18,6 @@ export const registerSchema = z.object({
         .string()
         .max(200, { message: "Bio must be less than 200 characters" })
         .optional(),
-    picture: z.string().optional(),
 });
 
 export const loginSchema = z.object({

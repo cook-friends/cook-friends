@@ -22,8 +22,8 @@ const userSchema = new mongoose.Schema(
             default: "",
         },
         picture: {
-            type: String,
-            default: "/assets/user/avatar.jpg",
+            public_id: String,
+            secure_url: String,
         },
         followers: [
             {

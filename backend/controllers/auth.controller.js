@@ -3,9 +3,25 @@ import bcrypt from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
+import { uploadImage } from "../libs/cloudinary.js";
+import fs from "fs-extra";
 
 export const register = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, bio } = req.body;
+    let picture;
+
+    if (req.files && req.files.picture) {
+        const { secure_url, public_id } = await uploadImage(
+            req.files.picture.tempFilePath
+        );
+
+        await fs.remove(req.files.picture.tempFilePath);
+
+        picture = {
+            secure_url,
+            public_id,
+        };
+    }
 
     try {
         const passwordHash = await bcrypt.hash(password, 10);
@@ -14,6 +30,8 @@ export const register = async (req, res) => {
             username,
             email,
             password: passwordHash,
+            bio,
+            picture,
         });
 
         const userSaved = await newUser.save();
@@ -26,8 +44,8 @@ export const register = async (req, res) => {
             _id: userSaved._id,
             username: userSaved.username,
             email: userSaved.email,
-            picture: userSaved.picture,
             bio: userSaved.bio,
+            picture: userSaved.picture,
             createdAt: userSaved.createdAt,
             updatedAt: userSaved.updatedAt,
         });
@@ -62,8 +80,8 @@ export const login = async (req, res) => {
             _id: userFound._id,
             username: userFound.username,
             email: userFound.email,
-            picture: userFound.picture,
             bio: userFound.bio,
+            picture: userFound.picture,
             createdAt: userFound.createdAt,
             updatedAt: userFound.updatedAt,
         });
@@ -94,8 +112,8 @@ export const verifyToken = async (req, res) => {
             id: userFound._id,
             username: userFound.username,
             email: userFound.email,
-            picture: userFound.picture,
             bio: userFound.bio,
+            picture: userFound.picture,
             createdAt: userFound.createdAt,
             updatedAt: userFound.updatedAt,
         });
