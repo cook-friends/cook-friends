@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -12,6 +12,8 @@ function RegisterPage() {
     } = useForm();
     const { signUp, isAuthenticated, errors: registerErrors } = useAuth();
     const navigate = useNavigate();
+    const [picture, setPicture] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (isAuthenticated) navigate("/");
@@ -19,7 +21,16 @@ function RegisterPage() {
     }, [isAuthenticated]);
 
     const onSubmit = handleSubmit(async (data) => {
-        await signUp(data);
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        const formData = new FormData();
+        formData.append("username", data.username);
+        formData.append("email", data.email);
+        formData.append("password", data.password);
+        formData.append("bio", data.bio);
+        formData.append("picture", picture);
+        await signUp(formData);
+        setIsSubmitting(false);
     });
 
     return (
@@ -70,11 +81,31 @@ function RegisterPage() {
                 </div>
 
                 <div className="mb-4">
+                    <label className="block text-white">Bio</label>
+                    <textarea
+                        {...register("bio")}
+                        className="block w-full px-4 py-2 mt-1 text-gray-800 bg-white rounded-lg"
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-white">Picture</label>
+                    <input
+                        type="file"
+                        {...register("picture")}
+                        className="block w-full px-4 py-2 mt-1 text-gray-800 bg-white rounded-lg"
+                        onChange={(e) => setPicture(e.target.files[0])}
+                        accept="image/*"
+                    />
+                </div>
+
+                <div className="mb-4">
                     <button
                         type="submit"
                         className="px-4 py-2 bg-white text-lime-400 rounded-lg hover:bg-gray-100"
+                        disabled={isSubmitting}
                     >
-                        Register
+                        {isSubmitting ? "Submitting..." : "Register"}
                     </button>
                 </div>
             </form>

@@ -17,6 +17,14 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        bio: {
+            type: String,
+            default: "",
+        },
+        picture: {
+            public_id: String,
+            secure_url: String,
+        },
         followers: [
             {
                 type: mongoose.Schema.Types.ObjectId,
