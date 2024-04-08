@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     profile,
+    getUsers,
     getUser,
     follow,
     unfollow,
@@ -11,7 +12,9 @@ const router = Router();
 
 router.get("/profile", authRequired, profile);
 
-router.get("/user/:id", authRequired, getUser);
+router.get("/users", authRequired, getUsers);
+
+router.get("/users/:id", authRequired, getUser);
 
 router.patch("/follow/:id", authRequired, follow);
 

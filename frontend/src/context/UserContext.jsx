@@ -1,5 +1,10 @@
-import { createContext, useContext } from "react";
-import { getUserRequest, followRequest, unfollowRequest } from "../api/user.js";
+import { createContext, useContext, useState } from "react";
+import {
+    getUsersRequest,
+    getUserRequest,
+    followRequest,
+    unfollowRequest,
+} from "../api/user.js";
 import PropTypes from "prop-types";
 
 const UserContext = createContext();
@@ -14,6 +19,18 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({ children }) => {
+    const [users, setUsers] = useState([]);
+    const [mostFollowedUsers, setMostFollowedUsers] = useState([]);
+
+    const getUsers = async () => {
+        try {
+            const res = await getUsersRequest();
+            setUsers(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const getUser = async (id) => {
         try {
             const res = await getUserRequest(id);
@@ -39,8 +56,29 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const getMostFollowedUsers = async (n) => {
+        try {
+            const res = await getUsersRequest();
+            const users = res.data;
+            users.sort((a, b) => b.followers.length - a.followers.length);
+            setMostFollowedUsers(users.slice(0, n));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
-        <UserContext.Provider value={{ getUser, follow, unfollow }}>
+        <UserContext.Provider
+            value={{
+                users,
+                getUsers,
+                getUser,
+                follow,
+                unfollow,
+                mostFollowedUsers,
+                getMostFollowedUsers,
+            }}
+        >
             {children}
         </UserContext.Provider>
     );

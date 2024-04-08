@@ -1,6 +1,8 @@
 import axios from "./axios.js";
 
-export const getUserRequest = async (id) => axios.get(`/user/${id}`);
+export const getUsersRequest = async () => axios.get("/users");
+
+export const getUserRequest = async (id) => axios.get(`/users/${id}`);
 
 export const followRequest = async (id) => axios.patch(`/follow/${id}`);
 

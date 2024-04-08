@@ -26,6 +26,28 @@ export const profile = async (req, res) => {
     }
 };
 
+export const getUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+
+        res.status(200).json(
+            users.map((user) => ({
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                bio: user.bio,
+                picture: user.picture,
+                followers: user.followers,
+                following: user.following,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            }))
+        );
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const getUser = async (req, res) => {
     try {
         const userId = req.params.id;

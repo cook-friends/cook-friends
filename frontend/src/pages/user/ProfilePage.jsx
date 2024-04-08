@@ -9,13 +9,13 @@ function ProfilePage() {
                 <div className="flex justify-center px-5  -mt-12">
                     {user.picture.secure_url ? (
                         <img
-                            className="h-32 w-32 bg-white rounded-full border-lime-400 border-4"
+                            className="size-32 rounded-full object-cover border-4 border-lime-400"
                             src={user.picture.secure_url}
                             alt="picture"
                         />
                     ) : (
                         <img
-                            className="h-32 w-32 bg-white rounded-full border-lime-400 border-4"
+                            className="size-32 rounded-full object-cover border-4 border-lime-400"
                             src="/assets/user/avatar.jpg"
                             alt="picture"
                         />

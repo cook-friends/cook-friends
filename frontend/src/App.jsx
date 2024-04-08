@@ -21,7 +21,7 @@ function App() {
                         <Route path="/login" element={<LoginPage />} />
                         <Route element={<ProtectedRoute />}>
                             <Route path="/profile" element={<ProfilePage />} />
-                            <Route path="/user/:id" element={<UserPage />} />
+                            <Route path="/users/:id" element={<UserPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
