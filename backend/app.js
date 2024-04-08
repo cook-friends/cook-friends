@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use(
 );
 
 app.use("/api/v1", authRoutes);
+app.use("/api/v1", userRoutes);
 
 export default app;

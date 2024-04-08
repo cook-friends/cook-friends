@@ -46,6 +46,8 @@ export const register = async (req, res) => {
             email: userSaved.email,
             bio: userSaved.bio,
             picture: userSaved.picture,
+            followers: userSaved.followers,
+            following: userSaved.following,
             createdAt: userSaved.createdAt,
             updatedAt: userSaved.updatedAt,
         });
@@ -82,6 +84,8 @@ export const login = async (req, res) => {
             email: userFound.email,
             bio: userFound.bio,
             picture: userFound.picture,
+            followers: userFound.followers,
+            following: userFound.following,
             createdAt: userFound.createdAt,
             updatedAt: userFound.updatedAt,
         });
@@ -109,37 +113,15 @@ export const verifyToken = async (req, res) => {
         if (!userFound) return res.sendStatus(401);
 
         return res.json({
-            id: userFound._id,
+            _id: userFound._id,
             username: userFound.username,
             email: userFound.email,
             bio: userFound.bio,
             picture: userFound.picture,
+            followers: userFound.followers,
+            following: userFound.following,
             createdAt: userFound.createdAt,
             updatedAt: userFound.updatedAt,
         });
     });
-};
-
-export const profile = async (req, res) => {
-    try {
-        const userId = req.user.id;
-
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        res.status(200).json({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            followers: user.followers,
-            following: user.following,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-        });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
 };
