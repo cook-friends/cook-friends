@@ -8,6 +8,7 @@ import RegisterPage from "./pages/user/RegisterPage";
 import LoginPage from "./pages/user/LoginPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import UserPage from "./pages/user/UserPage";
+import UserSearchPage from "./pages/user/UserSearchPage";
 
 function App() {
     return (
@@ -16,12 +17,16 @@ function App() {
                 <BrowserRouter>
                     <Navbar />
                     <Routes>
-                        <Route path="/" element={<HomePage />} />
                         <Route path="/register" element={<RegisterPage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route element={<ProtectedRoute />}>
+                            <Route path="/" element={<HomePage />} />
                             <Route path="/profile" element={<ProfilePage />} />
                             <Route path="/users/:id" element={<UserPage />} />
+                            <Route
+                                path="/users/search/:query"
+                                element={<UserSearchPage />}
+                            />
                         </Route>
                     </Routes>
                 </BrowserRouter>

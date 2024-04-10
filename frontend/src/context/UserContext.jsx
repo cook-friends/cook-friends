@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import {
     getUsersRequest,
     getUserRequest,
+    searchUsersRequest,
     followRequest,
     unfollowRequest,
 } from "../api/user.js";
@@ -20,6 +21,7 @@ export const useUser = () => {
 
 export const UserProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
+    const [searchResults, setSearchResults] = useState([]);
     const [mostFollowedUsers, setMostFollowedUsers] = useState([]);
 
     const getUsers = async () => {
@@ -35,6 +37,15 @@ export const UserProvider = ({ children }) => {
         try {
             const res = await getUserRequest(id);
             return res.data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const searchUsers = async (query) => {
+        try {
+            const res = await searchUsersRequest(query);
+            setSearchResults(res.data);
         } catch (error) {
             console.error(error);
         }
@@ -70,13 +81,15 @@ export const UserProvider = ({ children }) => {
     return (
         <UserContext.Provider
             value={{
-                users,
                 getUsers,
+                users,
                 getUser,
+                searchUsers,
+                searchResults,
                 follow,
                 unfollow,
-                mostFollowedUsers,
                 getMostFollowedUsers,
+                mostFollowedUsers,
             }}
         >
             {children}
