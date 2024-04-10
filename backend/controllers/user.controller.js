@@ -80,7 +80,7 @@ export const searchUsers = async (req, res) => {
 
         const users = await User.find({
             username: { $regex: query, $options: "i" },
-        });
+        }).sort({ followers: -1 });
 
         res.status(200).json(
             users.map((user) => ({
