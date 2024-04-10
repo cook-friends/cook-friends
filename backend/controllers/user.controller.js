@@ -74,6 +74,32 @@ export const getUser = async (req, res) => {
     }
 };
 
+export const searchUsers = async (req, res) => {
+    try {
+        const query = req.params.query;
+
+        const users = await User.find({
+            username: { $regex: query, $options: "i" },
+        });
+
+        res.status(200).json(
+            users.map((user) => ({
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                bio: user.bio,
+                picture: user.picture,
+                followers: user.followers,
+                following: user.following,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            }))
+        );
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const follow = async (req, res) => {
     try {
         const userId = req.params.id;
