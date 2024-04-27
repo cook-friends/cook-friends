@@ -8,7 +8,7 @@ function Navbar() {
 
     return (
         <nav className="flex justify-between items-center py-4 px-6 bg-white shadow">
-            <div>
+            <div className="flex gap-4 items-center">
                 <Link to="/" className="text-white text-xl font-semibold">
                     <img
                         src="/assets/cook&friends-logo.png"

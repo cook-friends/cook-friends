@@ -31,20 +31,20 @@ function HomePage() {
     };
 
     return (
-        <>
+        <div className="mb-10">
             <div className="flex justify-center items-center">
-                <div className="container bg-lime-400 p-20">
+                <div className="container bg-lime-400 p-20  flex flex-col items-center">
                     <h1 className="text-center font-bold text-white text-4xl">
                         Welcome to Cook&Friends!
                     </h1>
                     <p className="mx-auto font-normal text-white text-center text-sm my-6 max-w-lg">
                         Find your friends and discover new recipes with them!
                     </p>
-                    <form onSubmit={handleSearch}>
-                        <p className="text-red-500 mx-16 mb-1">
+                    <form className="w-full max-w-lg" onSubmit={handleSearch}>
+                        <p className="text-red-500 mb-1">
                             {searchErrorMessage}
                         </p>
-                        <div className="sm:flex items-center bg-white rounded-lg overflow-hidden mx-16 px-2 py-1 justify-between">
+                        <div className="sm:flex items-center bg-white rounded-lg overflow-hidden px-2 py-1 justify-between">
                             <input
                                 className="text-base text-gray-400 flex-grow outline-none px-2 "
                                 type="text"
@@ -97,7 +97,7 @@ function HomePage() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

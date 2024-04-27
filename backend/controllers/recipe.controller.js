@@ -171,3 +171,21 @@ export const getMostLikedRecipes = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const getRecipesByCreator = async (req, res) => {
+    try {
+        // Extract creator ID from request parameters
+        const { creatorId } = req.params;
+
+        console.log(req.params);
+
+        // Find the recipes created by the given creator
+        const recipes = await Recipe.find({ creator: creatorId });
+
+        // Respond with the fetched recipes
+        res.status(200).json(recipes);
+    } catch (error) {
+        // If an error occurs, send a 500 status code and error message
+        res.status(500).json({ message: error.message });
+    }
+};

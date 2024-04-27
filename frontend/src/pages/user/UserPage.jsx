@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useUser } from "../../context/UserContext";
+import { useRecipe } from "../../context/RecipeContext";
+import RecipeCard from "../../components/RecipeCard";
 
 function UserPage() {
     const [user, setUser] = useState({});
     const { user: authUser } = useAuth();
     const { getUser, follow, unfollow } = useUser();
+    const { creatorRecipes, fetchRecipesByCreator } = useRecipe();
     const params = useParams();
     const navigate = useNavigate();
 
@@ -25,6 +28,7 @@ function UserPage() {
             }
         }
         loadUser();
+        fetchRecipesByCreator(params.id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -58,7 +62,7 @@ function UserPage() {
                         />
                     )}
                 </div>
-                <div className=" ">
+                <div>
                     <div className="text-center px-14">
                         <h2 className="text-gray-800 text-3xl font-bold">
                             {user.username}
@@ -111,6 +115,18 @@ function UserPage() {
                             </p>
                         </div>
                     </div>
+                    <hr />
+                    {creatorRecipes.length === 0 ? (
+                        <p className="text-center text-lg text-gray-500 bg-gray-50 py-4">
+                            No recipes available
+                        </p>
+                    ) : (
+                        <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50">
+                            {creatorRecipes.map((recipe) => (
+                                <RecipeCard key={recipe._id} recipe={recipe} />
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

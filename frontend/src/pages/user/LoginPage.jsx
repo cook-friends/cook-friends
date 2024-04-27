@@ -33,7 +33,7 @@ function LoginPage() {
 
             <form onSubmit={onSubmit}>
                 <div className="mb-4">
-                    <label className="block text-white">Email</label>
+                    <label className="block text-white">Email *</label>
                     {errors.email && (
                         <p className="text-red-500">Email is required</p>
                     )}
@@ -45,7 +45,7 @@ function LoginPage() {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-white">Password</label>
+                    <label className="block text-white">Password *</label>
                     {errors.password && (
                         <p className="text-red-500">Password is required</p>
                     )}
