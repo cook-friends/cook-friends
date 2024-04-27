@@ -64,10 +64,17 @@ export const getRecipeById = async (req, res) => {
         // Find the total number of likes for the recipe
         const totalLikes = await Like.countDocuments({ recipeId: id });
 
-        // Add the total number of likes to the recipe object
-        const recipeWithLikes = { ...recipe.toObject(), likes: totalLikes };
+        // Check if the current logged-in user has liked the recipe
+        const liked = await Like.exists({ userId: req.user.id, recipeId: id });
 
-        // If recipe is found, respond with the fetched recipe including likes
+        // Add the total number of likes and the "liked" attribute to the recipe object
+        const recipeWithLikes = {
+            ...recipe.toObject(),
+            likes: totalLikes,
+            liked: liked !== null,
+        };
+
+        // If recipe is found, respond with the fetched recipe including likes and liked attribute
         res.status(200).json(recipeWithLikes);
     } catch (error) {
         // If an error occurs, send a 500 status code and error message
@@ -98,6 +105,34 @@ export const likeRecipe = async (req, res) => {
 
         // Respond with the saved like
         res.status(201).json(savedLike);
+    } catch (error) {
+        // If an error occurs, send a 500 status code and error message
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const dislikeRecipe = async (req, res) => {
+    try {
+        // Extract user ID and recipe ID from request body
+
+        // Check if the user has already liked the recipe
+        const existingLike = await Like.exists({
+            userId: req.user.id,
+            recipeId: req.params.id,
+        });
+
+        if (existingLike === null) {
+            // If the user has already liked the recipe, return a message indicating that
+            return res
+                .status(400)
+                .json({ message: "You haven't previously liked this recipe" });
+        } else {
+            await Like.findOneAndDelete({
+                userId: req.user.id,
+                recipeId: req.params.id,
+            });
+            res.status(204).json({ message: "deleted" });
+        }
     } catch (error) {
         // If an error occurs, send a 500 status code and error message
         res.status(500).json({ message: error.message });

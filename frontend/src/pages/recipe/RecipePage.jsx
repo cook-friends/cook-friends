@@ -8,7 +8,7 @@ function RecipePage() {
     const [recipe, setRecipe] = useState({});
     const [creator, setCreator] = useState(null);
     const { user: authUser } = useAuth();
-    const { fetchRecipe, likeRecipe } = useRecipe();
+    const { fetchRecipe, likeRecipe, dislikeRecipe } = useRecipe();
     const { getUser } = useUser();
     const params = useParams();
 
@@ -35,7 +35,13 @@ function RecipePage() {
     }, [recipe]);
 
     const handleLike = async () => {
-        await likeRecipe(authUser._id, recipe._id);
+        if (recipe.liked) {
+            await dislikeRecipe(authUser._id, recipe._id);
+            setRecipe(await fetchRecipe(params.id));
+        } else {
+            await likeRecipe(authUser._id, recipe._id);
+            setRecipe(await fetchRecipe(params.id));
+        }
     };
     return (
         <div className="mt-10 p-6 flex flex-wrap items-center justify-center">
@@ -48,6 +54,13 @@ function RecipePage() {
                         <div className="flex">
                             {authUser?._id === creator?._id ? (
                                 ""
+                            ) : recipe.liked ? (
+                                <button
+                                    className="px-4 py-2 bg-white text-lime-400 rounded-lg hover:bg-gray-100"
+                                    onClick={handleLike}
+                                >
+                                    Dislike
+                                </button>
                             ) : (
                                 <button
                                     className="px-4 py-2 bg-white text-lime-400 rounded-lg hover:bg-gray-100"

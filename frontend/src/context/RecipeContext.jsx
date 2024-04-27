@@ -6,6 +6,7 @@ import {
     getRecipesRequest,
     createNewRecipe,
     likeRecipeRequest,
+    dislikeRecipeRequest,
     getPopularRecipesRequest,
 } from "../api/recipe";
 
@@ -67,6 +68,14 @@ export const RecipeProvider = ({ children }) => {
         }
     };
 
+    const dislikeRecipe = async (userId, recipeId) => {
+        try {
+            await dislikeRecipeRequest(userId, recipeId);
+        } catch (error) {
+            alert(error.response.data.message);
+        }
+    };
+
     // Define other recipe-related functions...
 
     return (
@@ -79,6 +88,7 @@ export const RecipeProvider = ({ children }) => {
                 createRecipe,
                 likeRecipe,
                 fetchPopularRecipes,
+                dislikeRecipe,
                 // Pass other recipe-related functions here...
             }}
         >
