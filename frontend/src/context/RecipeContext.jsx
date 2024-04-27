@@ -5,6 +5,7 @@ import {
     getRecipeRequest,
     getRecipesRequest,
     createNewRecipe,
+    likeRecipeRequest,
 } from "../api/recipe";
 
 const RecipeContext = createContext();
@@ -48,6 +49,14 @@ export const RecipeProvider = ({ children }) => {
         }
     };
 
+    const likeRecipe = async (userId, recipeId) => {
+        try {
+            await likeRecipeRequest(userId, recipeId);
+        } catch (error) {
+            alert(error.response.data.message);
+        }
+    };
+
     // Define other recipe-related functions...
 
     return (
@@ -58,6 +67,7 @@ export const RecipeProvider = ({ children }) => {
                 fetchRecipes,
                 fetchRecipe,
                 createRecipe,
+                likeRecipe,
                 // Pass other recipe-related functions here...
             }}
         >

@@ -37,10 +37,6 @@ const recipeSchema = new mongoose.Schema({
     dietaryTags: {
         type: [String],
     },
-    likes: {
-        type: Number,
-        default: 0,
-    },
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

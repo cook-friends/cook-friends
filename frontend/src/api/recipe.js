@@ -6,4 +6,5 @@ export const getRecipeRequest = async (id) => axios.get(`/recipes/${id}`);
 
 export const createNewRecipe = async (recipe) => axios.post(`/recipes`, recipe);
 
-export const unfollowRequest = async (id) => axios.patch(`/unfollow/${id}`);
+export const likeRecipeRequest = async (userId, recipeId) =>
+    axios.patch(`/recipes/${recipeId}/like`, { userId, recipeId });

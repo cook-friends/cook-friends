@@ -1,4 +1,5 @@
 import Recipe from "../models/recipe.model.js";
+import Like from "../models/like.model.js";
 
 export const createRecipe = async (req, res) => {
     try {
@@ -60,8 +61,43 @@ export const getRecipeById = async (req, res) => {
             return res.status(404).json({ message: "Recipe not found" });
         }
 
-        // If recipe is found, respond with the fetched recipe
-        res.status(200).json(recipe);
+        // Find the total number of likes for the recipe
+        const totalLikes = await Like.countDocuments({ recipeId: id });
+
+        // Add the total number of likes to the recipe object
+        const recipeWithLikes = { ...recipe.toObject(), likes: totalLikes };
+
+        // If recipe is found, respond with the fetched recipe including likes
+        res.status(200).json(recipeWithLikes);
+    } catch (error) {
+        // If an error occurs, send a 500 status code and error message
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const likeRecipe = async (req, res) => {
+    try {
+        // Extract user ID and recipe ID from request body
+        const { userId, recipeId } = req.body;
+
+        // Check if the user has already liked the recipe
+        const existingLike = await Like.findOne({ userId, recipeId });
+
+        if (existingLike) {
+            // If the user has already liked the recipe, return a message indicating that
+            return res
+                .status(400)
+                .json({ message: "You've already liked this recipe" });
+        }
+
+        // Create a new like document
+        const newLike = new Like({ userId, recipeId });
+
+        // Save the new like to the database
+        const savedLike = await newLike.save();
+
+        // Respond with the saved like
+        res.status(201).json(savedLike);
     } catch (error) {
         // If an error occurs, send a 500 status code and error message
         res.status(500).json({ message: error.message });
