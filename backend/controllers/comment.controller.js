@@ -8,7 +8,7 @@ export const publishComment = async (req, res) => {
         // Create a new comment document
         const newComment = new Comment({
             userId: req.user.id,
-            recipeId: req.param.id,
+            recipeId: req.params.id,
             content,
         });
 
