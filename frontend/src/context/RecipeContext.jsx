@@ -9,6 +9,7 @@ import {
     dislikeRecipeRequest,
     getPopularRecipesRequest,
     postCommentRequest,
+    getRecipesByCreatorRequest,
 } from "../api/recipe";
 
 const RecipeContext = createContext();
@@ -24,6 +25,7 @@ export const useRecipe = () => {
 
 export const RecipeProvider = ({ children }) => {
     const [recipes, setRecipes] = useState([]);
+    const [creatorRecipes, setCreatorRecipes] = useState([]);
 
     const fetchRecipes = async () => {
         try {
@@ -61,6 +63,15 @@ export const RecipeProvider = ({ children }) => {
         }
     };
 
+    const fetchRecipesByCreator = async (creatorId) => {
+        try {
+            const res = await getRecipesByCreatorRequest(creatorId);
+            setCreatorRecipes(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const likeRecipe = async (userId, recipeId) => {
         try {
             await likeRecipeRequest(userId, recipeId);
@@ -92,9 +103,11 @@ export const RecipeProvider = ({ children }) => {
             // Pass these functions in the context value
             value={{
                 recipes,
+                creatorRecipes,
                 fetchRecipes,
                 fetchRecipe,
                 createRecipe,
+                fetchRecipesByCreator,
                 likeRecipe,
                 fetchPopularRecipes,
                 dislikeRecipe,
