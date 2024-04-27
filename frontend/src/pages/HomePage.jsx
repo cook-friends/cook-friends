@@ -2,17 +2,21 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import UserCard from "../components/UserCard";
+import RecipeCard from "../components/RecipeCard";
+import { useRecipe } from "../context/RecipeContext";
 
 function HomePage() {
     const [query, setQuery] = useState("");
     const [searchErrorMessage, setSearchErrorMessage] = useState("");
     const { searchUsers, mostFollowedUsers, getMostFollowedUsers } = useUser();
+    const { fetchRecipes, recipes } = useRecipe();
     const navigate = useNavigate();
 
     const NUMBER_OF_MOST_FOLLOWED_USERS = 4;
 
     useEffect(() => {
         getMostFollowedUsers(NUMBER_OF_MOST_FOLLOWED_USERS);
+        fetchRecipes();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -34,7 +38,7 @@ function HomePage() {
                         Welcome to Cook&Friends!
                     </h1>
                     <p className="mx-auto font-normal text-white text-center text-sm my-6 max-w-lg">
-                        Find your friends and share your recipes with them!
+                        Find your friends and discover new recipes with them!
                     </p>
                     <form onSubmit={handleSearch}>
                         <p className="text-red-500 mx-16 mb-1">
@@ -59,6 +63,16 @@ function HomePage() {
                             </button>
                         </div>
                     </form>
+                    <p className="mx-auto font-normal text-white text-center text-sm my-6 max-w-lg">
+                        Or share one of your recipes!
+                    </p>
+                    <button
+                        type="button"
+                        className="bg-lime-600 text-white text-base rounded-lg px-4 py-2 font-thin"
+                        onClick={() => navigate("/recipes/create")}
+                    >
+                        New Recipe
+                    </button>
                 </div>
             </div>
             <div className="container mx-auto px-20">
@@ -76,6 +90,11 @@ function HomePage() {
                     <p className="text-2xl text-lime-600 font-bold mt-8">
                         Most popular recipes
                     </p>
+                    <div className="grid grid-cols-4 gap-2 mt-4">
+                        {recipes.map((recipe) => (
+                            <RecipeCard key={recipe._id} recipe={recipe} />
+                        ))}
+                    </div>
                 </div>
             </div>
         </>
