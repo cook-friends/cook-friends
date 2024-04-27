@@ -57,6 +57,10 @@ function App() {
                                     path="/recipes/:id"
                                     element={<RecipePage />}
                                 />
+                                <Route
+                                    path="/recipes/search/:query"
+                                    element={<RecipeSearchPage />}
+                                />
                             </Route>
                         </Routes>
                     </BrowserRouter>

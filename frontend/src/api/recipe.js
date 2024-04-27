@@ -17,3 +17,6 @@ export const dislikeRecipeRequest = async (userId, recipeId) =>
 
 export const postCommentRequest = async (recipeId, content) =>
     axios.post(`/recipes/${recipeId}/comments`, { content });
+
+export const searchRecipesRequest = async (query) =>
+    axios.get(`/recipes/search/${query}`);

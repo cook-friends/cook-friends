@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UserCard from "../../components/UserCard";
 import { useRecipe } from "../../context/RecipeContext";
 import RecipeCard from "../../components/RecipeCard";
@@ -7,18 +7,24 @@ import RecipeCard from "../../components/RecipeCard";
 function RecipeSearchPage() {
     const [query, setQuery] = useState("");
     const [searchErrorMessage, setSearchErrorMessage] = useState("");
-    const { fetchRecipes, recipes } = useRecipe();
-    const searchResults = [];
+    const { fetchRecipes, recipes, searchResults, searchRecipes } = useRecipe();
     const params = useParams();
+    const navigate = useNavigate();
 
     const handleSearch = async (e) => {
         e.preventDefault();
+        if (!query) {
+            setSearchErrorMessage("Please enter a search query");
+            return;
+        }
+        await searchRecipes(query);
+        navigate(`/recipes/search/${query}`);
     };
 
     useEffect(() => {
         const loadSearchResults = async () => {
             if (params?.query) {
-                console.log(params.query);
+                await searchRecipes(params.query);
             } else {
                 await fetchRecipes();
             }
@@ -35,7 +41,7 @@ function RecipeSearchPage() {
                     <input
                         className="text-base text-gray-400 flex-grow outline-none px-2 "
                         type="text"
-                        placeholder="Search for users"
+                        placeholder="Search for recipes"
                         value={query}
                         onChange={(e) => {
                             setQuery(e.target.value);
@@ -54,7 +60,7 @@ function RecipeSearchPage() {
                 searchResults.length === 0 ? (
                     <div className="flex justify-center items-center">
                         <h1 className="text-lime-600 font-bold mt-4">
-                            No users found for &quot;{params.query}&quot;
+                            No recipes found for &quot;{params.query}&quot;
                         </h1>
                     </div>
                 ) : (
@@ -64,8 +70,11 @@ function RecipeSearchPage() {
                                 Search results for &quot;{params.query}&quot;
                             </p>
                             <div className="grid grid-cols-4 gap-2 mt-4">
-                                {searchResults.map((user) => (
-                                    <UserCard key={user._id} user={user} />
+                                {searchResults.map((recipe) => (
+                                    <RecipeCard
+                                        key={recipe._id}
+                                        recipe={recipe}
+                                    />
                                 ))}
                             </div>
                         </div>

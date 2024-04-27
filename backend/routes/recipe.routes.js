@@ -6,6 +6,7 @@ import {
     likeRecipe,
     getMostLikedRecipes,
     dislikeRecipe,
+    searchRecipes,
 } from "../controllers/recipe.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 
@@ -17,5 +18,6 @@ router.get("/recipes/:id", authRequired, getRecipeById);
 router.post("/recipes", authRequired, createRecipe);
 router.patch("/recipes/:id/like", authRequired, likeRecipe);
 router.patch("/recipes/:id/dislike", authRequired, dislikeRecipe);
+router.get("/recipes/search/:query", authRequired, searchRecipes);
 
 export default router;

@@ -9,6 +9,7 @@ import {
     dislikeRecipeRequest,
     getPopularRecipesRequest,
     postCommentRequest,
+    searchRecipesRequest,
 } from "../api/recipe";
 
 const RecipeContext = createContext();
@@ -24,6 +25,7 @@ export const useRecipe = () => {
 
 export const RecipeProvider = ({ children }) => {
     const [recipes, setRecipes] = useState([]);
+    const [searchResults, setSearchResults] = useState([]);
 
     const fetchRecipes = async () => {
         try {
@@ -85,6 +87,15 @@ export const RecipeProvider = ({ children }) => {
         }
     };
 
+    const searchRecipes = async (query) => {
+        try {
+            const res = await searchRecipesRequest(query);
+            setSearchResults(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     // Define other recipe-related functions...
 
     return (
@@ -99,6 +110,8 @@ export const RecipeProvider = ({ children }) => {
                 fetchPopularRecipes,
                 dislikeRecipe,
                 postComment,
+                searchRecipes,
+                searchResults,
                 // Pass other recipe-related functions here...
             }}
         >
