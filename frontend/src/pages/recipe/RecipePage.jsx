@@ -8,7 +8,7 @@ function RecipePage() {
     const [recipe, setRecipe] = useState({});
     const [creator, setCreator] = useState(null);
     const { user: authUser } = useAuth();
-    const { fetchRecipe, likeRecipe, dislikeRecipe } = useRecipe();
+    const { fetchRecipe, likeRecipe, dislikeRecipe, postComment } = useRecipe();
     const { getUser } = useUser();
     const params = useParams();
 
@@ -42,6 +42,13 @@ function RecipePage() {
             await likeRecipe(authUser._id, recipe._id);
             setRecipe(await fetchRecipe(params.id));
         }
+    };
+
+    const handleComment = async (e) => {
+        e.preventDefault();
+        console.log(e);
+        await postComment(params.id, e.target[0].value);
+        setRecipe(await fetchRecipe(params.id));
     };
     return (
         <div className="mt-10 p-6 flex flex-wrap items-center justify-center">
@@ -111,6 +118,44 @@ function RecipePage() {
                             </ul>
                         </div>
                     </div>
+                </div>
+                <div className="bg-lime-200 p-4 rounded-b-md">
+                    <h3 className="text-xl font-semibold">Post you opinion</h3>
+                    <form onSubmit={handleComment}>
+                        <div className="flex">
+                            <textarea
+                                name="content"
+                                id="content"
+                                className="text-base text-gray-400 flex-grow outline-none px-2 "
+                            />
+                        </div>
+                        <div>
+                            <button
+                                type="submit"
+                                className="px-4 py-2 bg-white text-lime-400 rounded-lg hover:bg-gray-100 mt-2"
+                            >
+                                Post Comment
+                            </button>
+                        </div>
+                    </form>
+                    <h3 className="text-xl font-semibold">Comments</h3>
+                    {recipe.comments &&
+                        recipe.comments.map((comment, index) => (
+                            <div
+                                key={index}
+                                className="bg-white rounded-md p-4 mt-4"
+                            >
+                                <p className="font-bold">
+                                    {comment.userId.username}
+                                </p>
+                                <p className="text-sm italic">
+                                    {new Date(
+                                        comment.createdAt
+                                    ).toLocaleDateString()}
+                                </p>
+                                <p>{comment.content}</p>
+                            </div>
+                        ))}
                 </div>
             </div>
         </div>

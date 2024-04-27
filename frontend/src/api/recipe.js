@@ -14,3 +14,6 @@ export const likeRecipeRequest = async (userId, recipeId) =>
 
 export const dislikeRecipeRequest = async (userId, recipeId) =>
     axios.patch(`/recipes/${recipeId}/dislike`);
+
+export const postCommentRequest = async (recipeId, content) =>
+    axios.post(`/recipes/${recipeId}/comments`, { content });

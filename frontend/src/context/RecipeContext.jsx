@@ -8,6 +8,7 @@ import {
     likeRecipeRequest,
     dislikeRecipeRequest,
     getPopularRecipesRequest,
+    postCommentRequest,
 } from "../api/recipe";
 
 const RecipeContext = createContext();
@@ -76,6 +77,14 @@ export const RecipeProvider = ({ children }) => {
         }
     };
 
+    const postComment = async (recipeId, content) => {
+        try {
+            await postCommentRequest(recipeId, content);
+        } catch (error) {
+            alert(error.response.data.message);
+        }
+    };
+
     // Define other recipe-related functions...
 
     return (
@@ -89,6 +98,7 @@ export const RecipeProvider = ({ children }) => {
                 likeRecipe,
                 fetchPopularRecipes,
                 dislikeRecipe,
+                postComment,
                 // Pass other recipe-related functions here...
             }}
         >

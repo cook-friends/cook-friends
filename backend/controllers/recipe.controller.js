@@ -1,5 +1,6 @@
 import Recipe from "../models/recipe.model.js";
 import Like from "../models/like.model.js";
+import Comment from "../models/comment.model.js";
 
 export const createRecipe = async (req, res) => {
     try {
@@ -67,11 +68,17 @@ export const getRecipeById = async (req, res) => {
         // Check if the current logged-in user has liked the recipe
         const liked = await Like.exists({ userId: req.user.id, recipeId: id });
 
+        const comments = await Comment.find({ recipeId: id }).populate(
+            "userId",
+            "username"
+        );
+
         // Add the total number of likes and the "liked" attribute to the recipe object
         const recipeWithLikes = {
             ...recipe.toObject(),
             likes: totalLikes,
             liked: liked !== null,
+            comments: comments,
         };
 
         // If recipe is found, respond with the fetched recipe including likes and liked attribute
