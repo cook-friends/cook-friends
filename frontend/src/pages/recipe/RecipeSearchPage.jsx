@@ -1,32 +1,26 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useUser } from "../../context/UserContext";
+import { useParams } from "react-router-dom";
 import UserCard from "../../components/UserCard";
+import { useRecipe } from "../../context/RecipeContext";
+import RecipeCard from "../../components/RecipeCard";
 
-function UserSearchPage() {
+function RecipeSearchPage() {
     const [query, setQuery] = useState("");
     const [searchErrorMessage, setSearchErrorMessage] = useState("");
-    const { searchUsers, searchResults, getUsers, users } = useUser();
-    const navigate = useNavigate();
+    const { fetchRecipes, recipes } = useRecipe();
+    const searchResults = [];
     const params = useParams();
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        if (!query) {
-            setSearchErrorMessage("Please enter a search query");
-            return;
-        }
-        await searchUsers(query);
-        navigate(`/users/search/${query}`);
     };
 
     useEffect(() => {
         const loadSearchResults = async () => {
             if (params?.query) {
                 console.log(params.query);
-                await searchUsers(params.query);
             } else {
-                await getUsers();
+                await fetchRecipes();
             }
         };
         loadSearchResults();
@@ -81,8 +75,8 @@ function UserSearchPage() {
                 <div className="container mx-auto px-20">
                     <div className="">
                         <div className="grid grid-cols-4 gap-2 mt-4">
-                            {users.map((user) => (
-                                <UserCard key={user._id} user={user} />
+                            {recipes.map((recipe) => (
+                                <RecipeCard key={recipe._id} recipe={recipe} />
                             ))}
                         </div>
                     </div>
@@ -92,4 +86,4 @@ function UserSearchPage() {
     );
 }
 
-export default UserSearchPage;
+export default RecipeSearchPage;

@@ -6,6 +6,7 @@ import {
     getRecipesRequest,
     createNewRecipe,
     likeRecipeRequest,
+    getPopularRecipesRequest,
 } from "../api/recipe";
 
 const RecipeContext = createContext();
@@ -25,6 +26,15 @@ export const RecipeProvider = ({ children }) => {
     const fetchRecipes = async () => {
         try {
             const res = await getRecipesRequest();
+            setRecipes(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchPopularRecipes = async () => {
+        try {
+            const res = await getPopularRecipesRequest();
             setRecipes(res.data);
         } catch (error) {
             console.error(error);
@@ -68,6 +78,7 @@ export const RecipeProvider = ({ children }) => {
                 fetchRecipe,
                 createRecipe,
                 likeRecipe,
+                fetchPopularRecipes,
                 // Pass other recipe-related functions here...
             }}
         >

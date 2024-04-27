@@ -16,6 +16,18 @@ function Navbar() {
                         className="h-10 inline-block mr-2"
                     />
                 </Link>
+                <Link
+                    to="/recipes/search"
+                    className="text-lime-400 mr-4 hover:font-semibold"
+                >
+                    All Recipes
+                </Link>
+                <Link
+                    to="/users/search"
+                    className="text-lime-400 mr-4 hover:font-semibold"
+                >
+                    All Users
+                </Link>
             </div>
             <div>
                 {isAuthenticated ? (
