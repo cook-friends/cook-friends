@@ -103,3 +103,29 @@ export const likeRecipe = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const getMostLikedRecipes = async (req, res) => {
+    try {
+        // Get the value of N from query parameters (default to 10 if not provided)
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Aggregate likes for each recipe and sort them based on the number of likes
+        const mostLikedRecipes = await Like.aggregate([
+            { $group: { _id: "$recipeId", likes: { $sum: 1 } } },
+            { $sort: { likes: -1 } },
+            { $limit: limit },
+        ]);
+
+        // Extract recipe IDs from the aggregated result
+        const recipeIds = mostLikedRecipes.map((item) => item._id);
+
+        // Find the recipes based on the extracted recipe IDs
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } });
+
+        // Respond with the most liked recipes
+        res.status(200).json(recipes);
+    } catch (error) {
+        // If an error occurs, send a 500 status code and error message
+        res.status(500).json({ message: error.message });
+    }
+};

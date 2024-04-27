@@ -9,14 +9,14 @@ function HomePage() {
     const [query, setQuery] = useState("");
     const [searchErrorMessage, setSearchErrorMessage] = useState("");
     const { searchUsers, mostFollowedUsers, getMostFollowedUsers } = useUser();
-    const { fetchRecipes, recipes } = useRecipe();
+    const { fetchPopularRecipes, recipes } = useRecipe();
     const navigate = useNavigate();
 
     const NUMBER_OF_MOST_FOLLOWED_USERS = 4;
 
     useEffect(() => {
         getMostFollowedUsers(NUMBER_OF_MOST_FOLLOWED_USERS);
-        fetchRecipes();
+        fetchPopularRecipes();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
