@@ -177,8 +177,6 @@ export const getRecipesByCreator = async (req, res) => {
         // Extract creator ID from request parameters
         const { creatorId } = req.params;
 
-        console.log(req.params);
-
         // Find the recipes created by the given creator
         const recipes = await Recipe.find({ creator: creatorId });
 
