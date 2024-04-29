@@ -28,6 +28,7 @@ const NewRecipeForm = () => {
     const handleIngredientChange = (index, e) => {
         const newIngredients = [...recipeData.ingredients];
         newIngredients[index][e.target.name] = e.target.value;
+
         setRecipeData({
             ...recipeData,
             ingredients: newIngredients,
@@ -39,7 +40,7 @@ const NewRecipeForm = () => {
             ...recipeData,
             ingredients: [
                 ...recipeData.ingredients,
-                { quantity: "", unit: "", name: "" },
+                { quantity: "", unit: "pieces", name: "" },
             ],
         });
     };
@@ -74,7 +75,7 @@ const NewRecipeForm = () => {
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label className="block text-white">Recipe Name</label>
+                    <label className="block text-white">Recipe Name *</label>
                     <input
                         type="text"
                         name="recipeName"
@@ -84,7 +85,7 @@ const NewRecipeForm = () => {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-white">Ingredients</label>
+                    <label className="block text-white">Ingredients *</label>
                     {recipeData.ingredients.map((ingredient, index) => (
                         <div key={index} className="flex">
                             <input
@@ -97,18 +98,21 @@ const NewRecipeForm = () => {
                                 }
                                 className="block w-full px-4 py-2 mt-1 text-gray-800 bg-white rounded-lg"
                             />
-                            <input
-                                type="text"
+
+                            <select
                                 name="unit"
-                                placeholder="Unit"
-                                value={ingredient.unit}
                                 onChange={(e) =>
                                     handleIngredientChange(index, e)
                                 }
                                 className="block w-full px-4 py-2 mt-1 text-gray-800 bg-white rounded-lg"
-                            />
+                            >
+                                <option value="pieces">Pieces</option>
+                                <option value="grams">Grams</option>
+                                <option value="milliliters">Millilitres</option>
+                            </select>
+
                             <input
-                                type="text"
+                                type=""
                                 name="name"
                                 placeholder="Name"
                                 value={ingredient.name}
@@ -135,7 +139,7 @@ const NewRecipeForm = () => {
                     </button>
                 </div>
                 <div className="mb-4">
-                    <label className="block text-white">Instructions</label>
+                    <label className="block text-white">Instructions *</label>
                     <textarea
                         name="instructions"
                         value={recipeData.instructions}
@@ -144,7 +148,7 @@ const NewRecipeForm = () => {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-white">Calories</label>
+                    <label className="block text-white">Calories *</label>
                     <input
                         type="text"
                         name="calories"
