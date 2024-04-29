@@ -101,52 +101,67 @@ const populateDatabase = async () => {
         user1.save();
 
         // Create recipes
+        const ingredient1 = {
+            quantity: 1,
+            unit: "pieces",
+            name: "Ingredient 1",
+        };
+        const ingredient2 = {
+            quantity: 2,
+            unit: "grams",
+            name: "Ingredient 2",
+        };
+        const ingredient3 = {
+            quantity: 3,
+            unit: "milliliters",
+            name: "Ingredient 3",
+        };
         const recipe1 = await createRecipe(
             "Recipe 1",
-            [],
+            [ingredient1],
             "Recipe 1 instructions",
             200,
-            ["Tag1", "Tag2"],
+            ["Vegan", "Gluten-free"],
             user1._id
         );
         const recipe2 = await createRecipe(
             "Recipe 2",
-            [],
+            [ingredient1, ingredient2],
             "Recipe 2 instructions",
             300,
-            ["Tag1", "Tag3"],
+            ["Vegan", "Paleo"],
             user2._id
         );
         const recipe3 = await createRecipe(
             "Recipe 3",
-            [],
+            [ingredient1, ingredient2, ingredient3],
             "Recipe 3 instructions",
             400,
-            ["Tag2", "Tag3"],
+            ["Gluten-free", "Paleo"],
             user3._id
         );
         const recipe4 = await createRecipe(
             "Recipe 4",
-            [],
+            [ingredient1, ingredient3],
             "Recipe 4 instructions",
             500,
-            ["Tag1"],
+            ["Vegan"],
             user1._id
         );
         const recipe5 = await createRecipe(
             "Recipe 5",
-            [],
+            [ingredient2, ingredient3],
             "Recipe 5 instructions",
             600,
-            ["Tag2"],
+            ["Gluten-free"],
             user2._id
         );
         const recipe6 = await createRecipe(
             "Recipe 6",
-            [],
+            [ingredient1],
             "Recipe 6 instructions",
             700,
-            ["Tag3"],
+            ["Paleo", "Dairy-free"],
             user3._id
         );
 
