@@ -25,10 +25,10 @@ export const publishComment = async (req, res) => {
 
 export const getCommentsByRecipeId = async (req, res) => {
     try {
-        const { recipeId } = req.params;
+        const { id } = req.params;
 
         // Find all comments associated with the given recipeId
-        const comments = await Comment.find({ recipeId });
+        const comments = await Comment.find({ recipeId: id });
 
         // Respond with the fetched comments
         res.status(200).json(comments);

@@ -1,7 +1,18 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useRecipe } from "../../context/RecipeContext";
+import RecipeCard from "../../components/RecipeCard";
 
 function ProfilePage() {
     const { user } = useAuth();
+    const { creatorRecipes, fetchRecipesByCreator } = useRecipe();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchRecipesByCreator(user._id);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="mt-10 p-6 flex flex-wrap items-center justify-center">
@@ -21,7 +32,7 @@ function ProfilePage() {
                         />
                     )}
                 </div>
-                <div className=" ">
+                <div>
                     <div className="text-center px-14">
                         <h2 className="text-gray-800 text-3xl font-bold">
                             {user.username}
@@ -35,6 +46,13 @@ function ProfilePage() {
                                 No bio available
                             </p>
                         )}
+                        <button
+                            type="button"
+                            className="mt-4 px-4 py-1 bg-lime-400 text-white rounded-md hover:bg-lime-500"
+                            onClick={() => navigate("/recipes/create")}
+                        >
+                            New Recipe
+                        </button>
                     </div>
                     <hr className="mt-6" />
                     <div className="flex  bg-gray-50 ">
@@ -57,6 +75,12 @@ function ProfilePage() {
                             </p>
                         </div>
                     </div>
+                    <hr />
+                </div>
+                <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50">
+                    {creatorRecipes.map((recipe) => (
+                        <RecipeCard key={recipe._id} recipe={recipe} />
+                    ))}
                 </div>
             </div>
         </div>

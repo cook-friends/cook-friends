@@ -7,6 +7,9 @@ export const getPopularRecipesRequest = async () =>
 
 export const getRecipeRequest = async (id) => axios.get(`/recipes/${id}`);
 
+export const getRecipesByCreatorRequest = async (creatorId) =>
+    axios.get(`/recipes/creator/${creatorId}`);
+
 export const createNewRecipe = async (recipe) => axios.post(`/recipes`, recipe);
 
 export const likeRecipeRequest = async (userId, recipeId) =>
