@@ -89,6 +89,48 @@ export const getRecipeById = async (req, res) => {
     }
 };
 
+export const searchRecipes = async (req, res) => {
+    try {
+        const query = req.params.query;
+
+        // Aggregate pipeline to perform the search and sort by number of likes
+        const pipeline = [
+            // Match recipes that match the query
+            {
+                $match: {
+                    recipeName: { $regex: query, $options: "i" },
+                },
+            },
+            // Left join with the Like collection to count the number of likes for each recipe
+            {
+                $lookup: {
+                    from: "likes",
+                    localField: "_id",
+                    foreignField: "recipeId",
+                    as: "likes",
+                },
+            },
+            // Add a new field 'likesCount' with the count of likes for each recipe
+            {
+                $addFields: {
+                    likesCount: { $size: "$likes" },
+                },
+            },
+            // Sort the recipes by the count of likes in descending order
+            {
+                $sort: { likesCount: -1 },
+            },
+        ];
+
+        // Execute the aggregation pipeline
+        const recipes = await Recipe.aggregate(pipeline);
+
+        res.status(200).json(recipes);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const likeRecipe = async (req, res) => {
     try {
         // Extract user ID and recipe ID from request body

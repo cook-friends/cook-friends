@@ -6,7 +6,9 @@ import {
     likeRecipe,
     getMostLikedRecipes,
     dislikeRecipe,
+    searchRecipes,
     getRecipesByCreator,
+
 } from "../controllers/recipe.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 
@@ -290,10 +292,13 @@ router.get("/recipes/creator/:creatorId", authRequired, getRecipesByCreator);
  */
 router.post("/recipes", authRequired, createRecipe);
 
+router.get("/recipes/search/:query", authRequired, searchRecipes);
+
+
 /**
  * @openapi
  * /api/v1/recipes/{id}/like:
- *   patch:
+ *   post:
  *     tags:
  *       - Recipe
  *     summary: Like a recipe
@@ -353,12 +358,12 @@ router.post("/recipes", authRequired, createRecipe);
  *                   type: string
  *                   example: An unexpected error occurred while processing your request.
  */
-router.patch("/recipes/:id/like", authRequired, likeRecipe);
+router.post("/recipes/:id/like", authRequired, likeRecipe);
 
 /**
  * @openapi
  * /api/v1/recipes/{id}/dislike:
- *   patch:
+ *   delete:
  *     tags:
  *       - Recipe
  *     summary: Remove like from a recipe
@@ -401,6 +406,7 @@ router.patch("/recipes/:id/like", authRequired, likeRecipe);
  *                   type: string
  *                   example: An unexpected error occurred while processing your request.
  */
-router.patch("/recipes/:id/dislike", authRequired, dislikeRecipe);
+router.delete("/recipes/:id/dislike", authRequired, dislikeRecipe);
+
 
 export default router;

@@ -13,10 +13,13 @@ export const getRecipesByCreatorRequest = async (creatorId) =>
 export const createNewRecipe = async (recipe) => axios.post(`/recipes`, recipe);
 
 export const likeRecipeRequest = async (userId, recipeId) =>
-    axios.patch(`/recipes/${recipeId}/like`, { userId, recipeId });
+    axios.post(`/recipes/${recipeId}/like`, { userId, recipeId });
 
 export const dislikeRecipeRequest = async (userId, recipeId) =>
-    axios.patch(`/recipes/${recipeId}/dislike`);
+    axios.delete(`/recipes/${recipeId}/dislike`);
 
 export const postCommentRequest = async (recipeId, content) =>
     axios.post(`/recipes/${recipeId}/comments`, { content });
+
+export const searchRecipesRequest = async (query) =>
+    axios.get(`/recipes/search/${query}`);

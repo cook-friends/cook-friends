@@ -1,24 +1,31 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import UserCard from "../../components/UserCard";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRecipe } from "../../context/RecipeContext";
 import RecipeCard from "../../components/RecipeCard";
 
 function RecipeSearchPage() {
     const [query, setQuery] = useState("");
+    const [maxCalories, setMaxCalories] = useState("");
+    const [selectedTags, setSelectedTags] = useState([]);
     const [searchErrorMessage, setSearchErrorMessage] = useState("");
-    const { fetchRecipes, recipes } = useRecipe();
-    const searchResults = [];
+    const { fetchRecipes, recipes, searchResults, searchRecipes } = useRecipe();
     const params = useParams();
+    const navigate = useNavigate();
 
     const handleSearch = async (e) => {
         e.preventDefault();
+        if (!query) {
+            setSearchErrorMessage("Please enter a search query");
+            return;
+        }
+        await searchRecipes(query);
+        navigate(`/recipes/search/${query}`);
     };
 
     useEffect(() => {
         const loadSearchResults = async () => {
             if (params?.query) {
-                console.log(params.query);
+                await searchRecipes(params.query);
             } else {
                 await fetchRecipes();
             }
@@ -26,6 +33,41 @@ function RecipeSearchPage() {
         loadSearchResults();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const filteredRecipes = params.query
+        ? searchResults.filter((recipe) => {
+              if (maxCalories && recipe.calories > parseInt(maxCalories)) {
+                  return false;
+              }
+              if (
+                  selectedTags.length > 0 &&
+                  !selectedTags.every((tag) => recipe.dietaryTags.includes(tag))
+              ) {
+                  return false;
+              }
+              return true;
+          })
+        : recipes.filter((recipe) => {
+              if (maxCalories && recipe.calories > parseInt(maxCalories)) {
+                  return false;
+              }
+              if (
+                  selectedTags.length > 0 &&
+                  !selectedTags.every((tag) => recipe.dietaryTags.includes(tag))
+              ) {
+                  return false;
+              }
+              return true;
+          });
+
+    const handleTagChange = (e) => {
+        const { name, checked } = e.target;
+        if (checked) {
+            setSelectedTags([...selectedTags, name]);
+        } else {
+            setSelectedTags(selectedTags.filter((tag) => tag !== name));
+        }
+    };
 
     return (
         <>
@@ -35,7 +77,7 @@ function RecipeSearchPage() {
                     <input
                         className="text-base text-gray-400 flex-grow outline-none px-2 "
                         type="text"
-                        placeholder="Search for users"
+                        placeholder="Search for recipes"
                         value={query}
                         onChange={(e) => {
                             setQuery(e.target.value);
@@ -49,12 +91,66 @@ function RecipeSearchPage() {
                         Search
                     </button>
                 </div>
+                <div className="mt-2">
+                    <label htmlFor="maxCalories" className="block mb-1">
+                        Max Calories
+                    </label>
+                    <input
+                        id="maxCalories"
+                        className="text-base text-gray-400 px-2 border border-lime-400 rounded-lg"
+                        type="number"
+                        placeholder="Max calories"
+                        value={maxCalories}
+                        onChange={(e) => setMaxCalories(e.target.value)}
+                    />
+                </div>
+                <div className="mt-2">
+                    <label className="block mb-1">Dietary Tags</label>
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="Vegan"
+                                checked={selectedTags.includes("Vegan")}
+                                onChange={handleTagChange}
+                            />
+                            Vegan
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="Gluten-free"
+                                checked={selectedTags.includes("Gluten-free")}
+                                onChange={handleTagChange}
+                            />
+                            Gluten-free
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="Paleo"
+                                checked={selectedTags.includes("Paleo")}
+                                onChange={handleTagChange}
+                            />
+                            Paleo
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="Dairy-free"
+                                checked={selectedTags.includes("Dairy-free")}
+                                onChange={handleTagChange}
+                            />
+                            Dairy-free
+                        </label>
+                    </div>
+                </div>
             </form>
             {params.query ? (
                 searchResults.length === 0 ? (
                     <div className="flex justify-center items-center">
                         <h1 className="text-lime-600 font-bold mt-4">
-                            No users found for &quot;{params.query}&quot;
+                            No recipes found for &quot;{params.query}&quot;
                         </h1>
                     </div>
                 ) : (
@@ -64,8 +160,11 @@ function RecipeSearchPage() {
                                 Search results for &quot;{params.query}&quot;
                             </p>
                             <div className="grid grid-cols-4 gap-2 mt-4">
-                                {searchResults.map((user) => (
-                                    <UserCard key={user._id} user={user} />
+                                {filteredRecipes.map((recipe) => (
+                                    <RecipeCard
+                                        key={recipe._id}
+                                        recipe={recipe}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -75,7 +174,7 @@ function RecipeSearchPage() {
                 <div className="container mx-auto px-20">
                     <div className="">
                         <div className="grid grid-cols-4 gap-2 mt-4">
-                            {recipes.map((recipe) => (
+                            {filteredRecipes.map((recipe) => (
                                 <RecipeCard key={recipe._id} recipe={recipe} />
                             ))}
                         </div>

@@ -23,7 +23,6 @@ function UserSearchPage() {
     useEffect(() => {
         const loadSearchResults = async () => {
             if (params?.query) {
-                console.log(params.query);
                 await searchUsers(params.query);
             } else {
                 await getUsers();
