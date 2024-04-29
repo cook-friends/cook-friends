@@ -16,8 +16,8 @@ router.get("/recipes", authRequired, getRecipes);
 router.get("/recipes/popular", authRequired, getMostLikedRecipes);
 router.get("/recipes/:id", authRequired, getRecipeById);
 router.post("/recipes", authRequired, createRecipe);
-router.patch("/recipes/:id/like", authRequired, likeRecipe);
-router.patch("/recipes/:id/dislike", authRequired, dislikeRecipe);
+router.post("/recipes/:id/like", authRequired, likeRecipe);
+router.delete("/recipes/:id/dislike", authRequired, dislikeRecipe);
 router.get("/recipes/search/:query", authRequired, searchRecipes);
 
 export default router;
