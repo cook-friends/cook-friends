@@ -193,18 +193,30 @@ export const getMostLikedRecipes = async (req, res) => {
         // Get the value of N from query parameters (default to 10 if not provided)
         const limit = parseInt(req.query.limit) || 10;
 
-        // Aggregate likes for each recipe and sort them based on the number of likes
-        const mostLikedRecipes = await Like.aggregate([
-            { $group: { _id: "$recipeId", likes: { $sum: 1 } } },
-            { $sort: { likes: -1 } },
+        const pipeline = [
+            {
+                $lookup: {
+                    from: "likes",
+                    localField: "_id",
+                    foreignField: "recipeId",
+                    as: "likes",
+                },
+            },
+            // Add a new field 'likesCount' with the count of likes for each recipe
+            {
+                $addFields: {
+                    likesCount: { $size: "$likes" },
+                },
+            },
+            // Sort the recipes by the count of likes in descending order
+            {
+                $sort: { likesCount: -1 },
+            },
             { $limit: limit },
-        ]);
-
-        // Extract recipe IDs from the aggregated result
-        const recipeIds = mostLikedRecipes.map((item) => item._id);
+        ];
 
         // Find the recipes based on the extracted recipe IDs
-        const recipes = await Recipe.find({ _id: { $in: recipeIds } });
+        const recipes = await Recipe.aggregate(pipeline);
 
         // Respond with the most liked recipes
         res.status(200).json(recipes);
