@@ -70,7 +70,7 @@ function RecipeSearchPage() {
     };
 
     return (
-        <>
+        <div className="mb-10">
             <form onSubmit={handleSearch} className="mt-4 px-20">
                 <p className="text-red-500 mb-1">{searchErrorMessage}</p>
                 <div className="sm:flex items-center bg-white rounded-lg border border-lime-400 overflow-hidden px-2 py-1 justify-between">
@@ -181,7 +181,7 @@ function RecipeSearchPage() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }
 

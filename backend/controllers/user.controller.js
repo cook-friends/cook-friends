@@ -159,3 +159,43 @@ export const unfollow = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const getFollowers = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const user = await User.findById(userId).populate("followers");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        user.followers.forEach((follower) => {
+            follower.password = undefined;
+        });
+
+        res.status(200).json(user.followers);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getFollowing = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const user = await User.findById(userId).populate("following");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        user.following.forEach((followed) => {
+            followed.password = undefined;
+        });
+
+        res.status(200).json(user.following);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
