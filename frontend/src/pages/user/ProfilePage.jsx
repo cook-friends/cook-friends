@@ -56,16 +56,22 @@ function ProfilePage() {
                     </div>
                     <hr className="mt-6" />
                     <div className="flex  bg-gray-50 ">
-                        <div className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer">
+                        <button
+                            className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => navigate(`/followers`)}
+                        >
                             <p>
                                 <span className="font-semibold text-lime-400">
                                     {user.followers.length}{" "}
                                 </span>{" "}
                                 Followers
                             </p>
-                        </div>
+                        </button>
                         <div className="border"></div>
-                        <div className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer">
+                        <button
+                            className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => navigate(`/following`)}
+                        >
                             <p>
                                 {" "}
                                 <span className="font-semibold text-lime-400">
@@ -73,7 +79,7 @@ function ProfilePage() {
                                 </span>{" "}
                                 Following
                             </p>
-                        </div>
+                        </button>
                     </div>
                     <hr />
                 </div>

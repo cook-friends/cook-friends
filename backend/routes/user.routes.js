@@ -6,6 +6,8 @@ import {
     searchUsers,
     follow,
     unfollow,
+    getFollowers,
+    getFollowing,
 } from "../controllers/user.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 
@@ -399,5 +401,143 @@ router.patch("/follow/:id", authRequired, follow);
  *                   example: An unexpected error occurred while processing your request.
  */
 router.patch("/unfollow/:id", authRequired, unfollow);
+
+/**
+ * @openapi
+ * /api/v1/followers:
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Get followers of the authenticated user
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   picture:
+ *                     type: object
+ *                     properties:
+ *                       public_id:
+ *                         type: string
+ *                         description: Public ID of the user's profile picture
+ *                       secure_url:
+ *                         type: string
+ *                         description: Secure URL of the user's profile picture
+ *                   _id:
+ *                     type: string
+ *                     description: ID of the user
+ *                   username:
+ *                     type: string
+ *                     description: Username of the user
+ *                   email:
+ *                     type: string
+ *                     description: Email of the user
+ *                   bio:
+ *                     type: string
+ *                     description: Bio of the user
+ *                   followers:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: IDs of the user's followers
+ *                   following:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: IDs of the users the user is following
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date and time when the user was created
+ *                   updatedAt:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date and time when the user was last updated
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: An unexpected error occurred while processing your request.
+ */
+router.get("/followers", authRequired, getFollowers);
+
+/**
+ * @openapi
+ * /api/v1/following:
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Get users followed by the authenticated user
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   picture:
+ *                     type: object
+ *                     properties:
+ *                       public_id:
+ *                         type: string
+ *                         description: Public ID of the user's profile picture
+ *                       secure_url:
+ *                         type: string
+ *                         description: Secure URL of the user's profile picture
+ *                   _id:
+ *                     type: string
+ *                     description: ID of the user
+ *                   username:
+ *                     type: string
+ *                     description: Username of the user
+ *                   email:
+ *                     type: string
+ *                     description: Email of the user
+ *                   bio:
+ *                     type: string
+ *                     description: Bio of the user
+ *                   followers:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: IDs of the user's followers
+ *                   following:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: IDs of the users the user is following
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date and time when the user was created
+ *                   updatedAt:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date and time when the user was last updated
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: An unexpected error occurred while processing your request.
+ */
+router.get("/following", authRequired, getFollowing);
 
 export default router;

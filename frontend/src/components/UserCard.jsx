@@ -10,7 +10,7 @@ function UserCard({ user }) {
                 <img
                     alt="picture"
                     src={
-                        user.picture.secure_url
+                        user.picture?.secure_url
                             ? user.picture.secure_url
                             : "/assets/user/avatar.jpg"
                     }

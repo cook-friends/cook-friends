@@ -5,6 +5,8 @@ import {
     searchUsersRequest,
     followRequest,
     unfollowRequest,
+    getFollowersRequest,
+    getFollowingRequest,
 } from "../api/user.js";
 import PropTypes from "prop-types";
 
@@ -23,6 +25,8 @@ export const UserProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
     const [mostFollowedUsers, setMostFollowedUsers] = useState([]);
+    const [followers, setFollowers] = useState([]);
+    const [following, setFollowing] = useState([]);
 
     const getUsers = async () => {
         try {
@@ -78,6 +82,24 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const getFollowers = async () => {
+        try {
+            const res = await getFollowersRequest();
+            setFollowers(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getFollowing = async () => {
+        try {
+            const res = await getFollowingRequest();
+            setFollowing(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <UserContext.Provider
             value={{
@@ -90,6 +112,10 @@ export const UserProvider = ({ children }) => {
                 unfollow,
                 getMostFollowedUsers,
                 mostFollowedUsers,
+                getFollowers,
+                followers,
+                getFollowing,
+                following,
             }}
         >
             {children}

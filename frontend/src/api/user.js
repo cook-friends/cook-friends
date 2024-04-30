@@ -10,3 +10,7 @@ export const searchUsersRequest = async (query) =>
 export const followRequest = async (id) => axios.patch(`/follow/${id}`);
 
 export const unfollowRequest = async (id) => axios.patch(`/unfollow/${id}`);
+
+export const getFollowersRequest = async () => axios.get(`/followers`);
+
+export const getFollowingRequest = async () => axios.get(`/following`);

@@ -9,6 +9,8 @@ import LoginPage from "./pages/user/LoginPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import UserPage from "./pages/user/UserPage";
 import UserSearchPage from "./pages/user/UserSearchPage";
+import FollowersPage from "./pages/user/FollowersPage";
+import FollowingPage from "./pages/user/FollowingPage";
 import RecipeProvider from "./context/RecipeContext";
 import NewRecipeForm from "./pages/recipe/NewRecipeForm";
 import RecipePage from "./pages/recipe/RecipePage";
@@ -44,6 +46,14 @@ function App() {
                                 <Route
                                     path="/users/search"
                                     element={<UserSearchPage />}
+                                />
+                                <Route
+                                    path="/followers"
+                                    element={<FollowersPage />}
+                                />
+                                <Route
+                                    path="/following"
+                                    element={<FollowingPage />}
                                 />
                                 <Route
                                     path="/recipes/search"
